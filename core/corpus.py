@@ -69,6 +69,31 @@ class Sentence:
     sid: str          # "<source_id>#s<n>"
     source_id: str
     text: str
+    heading: bool = False   # page heading / nav label: context only, never citable
+    section: str = ""       # nearest heading above this sentence
+    lead_sid: str = ""      # for bullets: the "...:" sentence the list hangs off
+
+    @property
+    def citable(self) -> bool:
+        return not self.heading
+
+    def context_text(self) -> str:
+        """Text shown to the LLM: section heading as a prefix so a row like
+        "0.10% with min ₹100" under "NRI brokerage charges" is not read as a general rule."""
+        return f"[{self.section}] {self.text}" if self.section else self.text
+
+
+_BULLET = re.compile(r"^[-•*]\s")
+
+
+def _is_heading(para: str) -> bool:
+    """Short single-line paragraph without sentence punctuation (headings, nav labels).
+    Question headings ("What are DP charges?") count; numeric rows do not."""
+    if _BULLET.match(para) or len(split_sentences(para)) != 1 or len(para.split()) > 12:
+        return False
+    if para.endswith((".", ":", ";", ",")):
+        return False
+    return not (re.search(r"\d", para) and not para.endswith("?"))
 
 
 @dataclass(frozen=True)
@@ -91,15 +116,26 @@ class Corpus:
             text = (CORPUS_DIR / "docs" / f"{sid}.txt").read_text(encoding="utf-8")
             sents: list[Sentence] = []
             n = 0
+            section, lead = "", ""
             for para in re.split(r"\n\s*\n|\n(?=[-•*]\s)", text):
                 para = " ".join(para.split())
                 if not para:
                     continue
+                heading = _is_heading(para)
+                bullet = bool(_BULLET.match(para))
+                if not bullet:
+                    lead = ""
                 for s in split_sentences(para):
                     if len(s) < 12:
                         continue
                     n += 1
-                    sents.append(Sentence(f"{sid}#s{n}", sid, s))
+                    sents.append(Sentence(f"{sid}#s{n}", sid, s, heading=heading,
+                                          section="" if heading else section,
+                                          lead_sid=lead if bullet else ""))
+                    if s.endswith(":") and not heading:
+                        lead = f"{sid}#s{n}"   # following bullets hang off this sentence
+                if heading:
+                    section, lead = para, ""
             for s in sents:
                 self.sentences[s.sid] = s
             # ~120-word chunks with 1-sentence overlap
@@ -116,7 +152,10 @@ class Corpus:
         title_of = {s: self.sources[s].title for s in self.sources}
         self._bm25 = BM25Okapi([tokenize(title_of[c.source_id] + " " + c.text) for c in self.chunks])
         self._sids = list(self.sentences)
-        self._bm25_s = BM25Okapi([tokenize(title_of[self.sentences[i].source_id] + " " + self.sentences[i].text) for i in self._sids])
+        # heading sentences are context only: keep them out of sentence-level retrieval
+        self._sids = [i for i in self._sids if self.sentences[i].citable]
+        self._bm25_s = BM25Okapi([tokenize(title_of[self.sentences[i].source_id] + " " + self.sentences[i].context_text())
+                                  for i in self._sids])
 
     def _add_chunk(self, sid: str, buf: list[Sentence]) -> None:
         self.chunks.append(Chunk(f"{sid}#c{len(self.chunks)}", sid, tuple(s.sid for s in buf), " ".join(s.text for s in buf)))

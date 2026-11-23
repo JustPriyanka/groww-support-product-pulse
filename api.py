@@ -75,7 +75,9 @@ def reviewer_auth(x_reviewer_passcode: Optional[str] = Header(default=None)) -> 
 # --------------------------------------------------------------------------- meta
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "llm_configured": bool(config.GROQ_API_KEY), "next_scheduled_pulse": scheduler.next_run()}
+    from core import llm
+    return {"status": "ok", "llm_configured": bool(config.GROQ_API_KEY), "llm_status": llm.status(),
+            "llm_last_error": llm.last_error, "next_scheduled_pulse": scheduler.next_run()}
 
 
 @app.get("/api/meta")

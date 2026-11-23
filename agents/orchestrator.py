@@ -27,6 +27,8 @@ SYSTEM = """You write customer-support reply sentences for Groww using ONLY the 
 Rules (strict):
 - Write at most {k} sentence(s). Each sentence must end with citation markers for the facts it uses, e.g. "... [1]." or "... [1][2]."
 - Use only facts given; keep every number, %, ₹ amount exactly as in the fact. No other numbers.
+- If the facts contain specific charges or amounts, state them (with their conditions) instead of saying
+  the amount "varies"; a customer asking about a deduction needs the actual figures.
 - Neutral, factual tone. No recommendations, no opinions about whether to buy/sell/hold, no returns or performance.
 - Do not mention internal teams, priorities, or review data. No greetings or sign-offs.
 {extra}

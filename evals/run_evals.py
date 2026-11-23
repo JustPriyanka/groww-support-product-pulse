@@ -29,6 +29,20 @@ SOURCES = {s["id"]: s for s in json.loads((ROOT / "data/corpus/sources.json").re
 REVIEWS = {r["review_id"]: r for r in csv.DictReader(open(ROOT / "data/reviews/groww_reviews.csv", encoding="utf-8"))}
 
 
+def _pii_snippets(blob: str, limit: int = 5) -> list[str]:
+    """Matched text with context, so a pattern failure can be told apart from a false positive."""
+    from core.pii import _PATTERNS
+    out = []
+    for kind, rx in _PATTERNS:
+        for m in rx.finditer(blob):
+            # digits masked: the report is committed, the context is what tells us what matched
+            ctx = re.sub(r"\d", "#", blob[max(0, m.start() - 50):m.end() + 20])
+            out.append(f"{kind}: …{ctx}…")
+            if len(out) >= limit:
+                return out
+    return out
+
+
 class Eval:
     def __init__(self, base: str):
         self.c = httpx.Client(base_url=base, timeout=300)
@@ -370,7 +384,7 @@ class Eval:
             hits = [v for v in literals if v.lower() in blob.lower()]
             self.check("privacy", f"no probe PII literal in {name}", not hits, hits)
             det = contains_pii(blob)
-            self.check("privacy", f"no detectable PII pattern in {name}", not det, det)
+            self.check("privacy", f"no detectable PII pattern in {name}", not det, _pii_snippets(blob) if det else det)
 
 
 def main() -> None:

@@ -64,7 +64,8 @@ Set `ALLOWED_ORIGINS` on Railway to the Vercel production URL (comma-separate ex
 
 ```bash
 B=https://<railway-domain>
-curl -s $B/api/health                       # {"status":"ok","llm_configured":true,"next_scheduled_pulse":...}
+curl -s $B/api/health                       # {"status":"ok","llm_configured":true,"llm_status":"ok",...}
+                                            # llm_status turns "auth_error" after the first rejected LLM call
 curl -s $B/api/meta | python3 -m json.tool  # 24 sources, 11,526 reviews
 curl -s -X POST $B/api/questions -H 'Content-Type: application/json' \
      -d '{"text":"Why was a DP charge deducted when I sold my shares?"}' | python3 -c "import json,sys;print(json.load(sys.stdin)['current_draft']['reply'])"
@@ -85,6 +86,8 @@ Results: `evals/results/<timestamp>/` and `evals/results/latest.md`.
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
+| Themes say `keyword_fallback`, replies are extractive, `/api/health` shows `llm_status: auth_error` | Groq rejects `GROQ_API_KEY` (401) — wrong value or a mistyped variable name such as `GROQ_API_KEY:` | re-paste the key under the exact name `GROQ_API_KEY`; health now reports `llm_last_error` |
+| Requests go to `…railway.app%20/api` | trailing space in `VITE_API_URL` | value is trimmed in code; also clean it in Vercel |
 | CORS error | `ALLOWED_ORIGINS` missing the Vercel URL | update Railway variable |
 | Approvals vanish after redeploy | no volume / `DATA_DIR` not `/data` | add volume, set `DATA_DIR` |
 | Pulse runs twice | more than one replica/worker | keep `numReplicas: 1`, `--workers 1` |

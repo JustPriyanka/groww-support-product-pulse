@@ -7,7 +7,13 @@ BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 
 # LLM
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+def _clean(v: str | None) -> str | None:
+    """Strip whitespace and surrounding quotes pasted into dashboard env vars."""
+    v = (v or "").strip().strip("'\"").strip()
+    return v or None
+
+
+GROQ_API_KEY = _clean(os.getenv("GROQ_API_KEY"))
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 GROQ_FAST_MODEL = os.getenv("GROQ_FAST_MODEL", "openai/gpt-oss-20b")
 

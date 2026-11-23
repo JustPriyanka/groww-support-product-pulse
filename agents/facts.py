@@ -26,7 +26,12 @@ Rules:
 - Each fact must cite the sentence_ids it is based on, exactly as given.
 - Paraphrase minimally; keep every number, %, and ₹ amount exactly as written in the cited sentence.
 - Never include investment advice, recommendations, or return/performance figures, even if a sentence contains them.
-- Prefer facts that directly answer the question; at most 4 facts.
+- A [bracketed] prefix is the section heading the sentence sits under. Respect it: a sentence under
+  "NRI brokerage charges" applies only to NRIs, so do not state it as a general rule.
+- A (parenthesised) prefix is the list heading a bullet belongs to, e.g. "(For debit values below ₹100:)".
+  Keep that condition in the claim; never state a bullet without it.
+- Prefer facts that directly answer the question. For questions about a charge, explain why it applies
+  AND state the exact amounts with their conditions; at most 4 facts.
 Return JSON: {"covered": bool, "facts": [{"claim": str, "sentence_ids": [str]}], "missing": str}"""
 
 INTENT_QUERY_HINTS = {
@@ -43,6 +48,22 @@ INTENT_QUERY_HINTS = {
     "withdrawal": "withdrawal balance bank account credited",
     "kyc_account": "KYC account",
 }
+
+
+def _with_leads(sids: list[str]) -> list[str]:
+    """A cited bullet ("- Male investors: ₹20.00") is only correct together with the line it
+    hangs off ("For debit (sale) values of ₹100 or more:"), so cite that line too."""
+    corpus = get_corpus()
+    out: list[str] = []
+    for sid in sids:
+        chain, cur = [], corpus.sentences[sid].lead_sid
+        while cur and cur not in out and cur not in chain and len(chain) < 3:
+            chain.insert(0, cur)
+            cur = corpus.sentences[cur].lead_sid
+        out += [c for c in chain if c not in out]
+        if sid not in out:
+            out.append(sid)
+    return out
 
 
 def _scheme_sources(scheme: str | None) -> set[str]:
@@ -80,7 +101,7 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
             cand_ids.append(sid)
     for c, _ in chunks:
         for sid in c.sentence_ids:
-            if sid not in cand_ids:
+            if sid not in cand_ids and corpus.sentences[sid].citable:  # headings: context only
                 cand_ids.append(sid)
     cand_ids = cand_ids[:28]
     searched = {
@@ -94,7 +115,11 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
     if not cand_ids:
         return FactsOutput(status="not_covered", searched=searched, topic=topic, note="no retrieval hits")
 
-    listing = "\n".join(f"[{sid}] ({corpus.sources[corpus.sentences[sid].source_id].publisher}) {corpus.sentences[sid].text[:320]}" for sid in cand_ids)
+    def _line(sid: str) -> str:
+        st = corpus.sentences[sid]
+        lead = f"({corpus.sentences[st.lead_sid].text}) " if st.lead_sid else ""
+        return f"[{sid}] ({corpus.sources[st.source_id].publisher}) {lead}{st.context_text()}"[:420]
+    listing = "\n".join(_line(sid) for sid in cand_ids)
     mode = "llm"
     try:
         data = chat_json(SYSTEM, f"Customer question: {question}\n\nCandidate sentences:\n{listing}", purpose="facts", max_tokens=1500)
@@ -121,6 +146,7 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
             # keep the claim tied to one source for a clean citation; split by first source
             first = corpus.sentences[sids[0]].source_id
             sids = [s for s in sids if corpus.sentences[s].source_id == first]
+        sids = _with_leads(sids)
         quotes = [corpus.sentences[s].text for s in sids]
         if not numbers_in(claim) <= numbers_in(" ".join(quotes)):
             continue  # number not in cited text -> dropped

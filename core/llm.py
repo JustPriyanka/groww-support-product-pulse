@@ -28,6 +28,19 @@ class LLMUnavailable(RuntimeError):
     pass
 
 
+# Last provider-level failure, surfaced by /api/health so a bad key is not silently
+# masked by the extractive / keyword fallbacks.
+last_error: dict | None = None
+
+
+def status() -> str:
+    if not GROQ_API_KEY:
+        return "not_configured"
+    if last_error and last_error.get("kind") == "auth":
+        return "auth_error"
+    return "ok"
+
+
 # Groq free tier: 8,000 tokens/minute per model. A client-side sliding-window limiter keeps
 # us under it so parallel agents queue briefly instead of tripping 429s.
 TPM_BUDGET = 7000
@@ -83,6 +96,7 @@ def _repair_json(raw: str) -> dict | None:
 def chat_json(system: str, user: str, *, fast: bool = False, temperature: float = 0.1,
               max_tokens: int = 2048, purpose: str = "") -> dict:
     """Call Groq expecting a JSON object. Raises LLMUnavailable after retries."""
+    global last_error
     # Defence in depth: refuse to send PII to the provider.
     kinds = contains_pii(user)
     if kinds:
@@ -103,6 +117,7 @@ def chat_json(system: str, user: str, *, fast: bool = False, temperature: float 
                 reasoning_effort="low",
             )
             _settle(slot, getattr(getattr(resp, "usage", None), "total_tokens", None))
+            last_error = None
             raw = resp.choices[0].message.content or ""
             data = _repair_json(raw)
             log.info("llm ok purpose=%s model=%s ms=%d", purpose, model, int((time.time() - t0) * 1000))
@@ -111,6 +126,11 @@ def chat_json(system: str, user: str, *, fast: bool = False, temperature: float 
                     continue
                 raise LLMUnavailable("malformed JSON from model")
             return data
+        except (groq.AuthenticationError, groq.PermissionDeniedError) as e:
+            # A bad key never recovers by retrying: record it and fail fast.
+            last_error = {"kind": "auth", "at": time.strftime("%Y-%m-%dT%H:%M:%S"), "detail": str(e)[:160]}
+            log.error("llm auth error purpose=%s: %s", purpose, str(e)[:200])
+            raise LLMUnavailable("auth error (check GROQ_API_KEY)")
         except groq.RateLimitError:
             if attempt > MAX_RATE_LIMIT_RETRIES:
                 raise LLMUnavailable("rate limited")
