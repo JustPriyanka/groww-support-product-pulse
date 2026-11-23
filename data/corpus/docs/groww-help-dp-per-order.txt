@@ -1,0 +1,23 @@
+Customer Support
+
+Help and Support
+
+Are DP charges per stock or per order?
+
+DP charges are applied per sell order, not per stock.
+
+This means:
+
+If you sell multiple units of the same stock in one order, DP charges are levied only once.
+
+If you sell different stocks in separate orders, each sell order will attract separate DP charges.
+
+Note: If you sell the units of the same stock in multiple separate orders, you will be charged DP charges multiple times, once for each sell order.
+
+Example:
+
+Selling 10 units of Stock A in one order → 1 DP charge
+
+Selling Stock A and Stock B in separate orders → 2 DP charges
+
+Selling 5 units of Stock A in two separate orders → 2 DP charges

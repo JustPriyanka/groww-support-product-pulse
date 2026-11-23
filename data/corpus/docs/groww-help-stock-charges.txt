@@ -1,0 +1,27 @@
+Customer Support
+
+Help and Support
+
+How much does Groww charge for stocks?
+
+Groww charges a brokerage fee for trading stocks, which is the lower of ₹20 or 0.1% of your trade value. The minimum charge is ₹5.
+
+Regulatory Cap: According to SEBI guidelines, brokerage charges can't exceed 2.5% of the trade value for equity delivery trades.
+
+DP Charges (Depository Participant Charges): When you sell shares from your Demat account on Groww, a DP charge applies. This includes both the depository’s charge and Groww’s fee:
+
+- For sale values of ₹100 or more:
+
+- Male investors: ₹3.50 (Depository) + ₹16.50 (Groww) = ₹20.00 (plus GST)
+
+- Female investors: ₹3.25 (Depository) + ₹16.50 (Groww) = ₹19.75 (plus GST)
+
+- For sale values below ₹100:
+
+- Groww waives its fee.
+
+- Male investors pay only ₹3.50 (plus GST)
+
+- Female investors pay only ₹3.25 (plus GST)
+
+Note: These charges apply each time you sell shares on Groww. GST is added on top of these charges. Additional charges like regulatory fees and statutory charges are not from Groww but are levied by the exchange.

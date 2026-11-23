@@ -1,0 +1,45 @@
+Customer Support
+
+Help and Support
+
+Why did my SIP installment fail?
+
+Your SIP installment might have failed due to several reasons. Here's a breakdown:
+
+1. KYC & Investor Details Issues:
+
+- Your name, date of birth, email, mobile, or tax status might not match NSDL/KRA/RTA records.
+
+- KYC verification could be incomplete, on hold, or expired.
+
+- Your PAN might not be linked with Aadhaar or could be invalid.
+
+- Nominee details might be missing or incorrect.
+
+- You might be a restricted investor (e.g., from the USA or Canada).
+
+2. Payment Issues:
+
+- The SIP might not be linked to an approved AutoPay.
+
+- Payment might not have been initiated or completed.
+
+- There could be insufficient balance in your bank account.
+
+- The SIP mandate might be missing, expired, or rejected.
+
+- Payment might have been stopped due to compliance issues or manual rejection.
+
+3. Scheme & Investment Restrictions:
+
+- The scheme might be closed for new SIPs.
+
+- You might have exceeded the maximum investment limit.
+
+- There could be scheme-specific restrictions on investment mode or tax status.
+
+- The investment amount might not meet scheme requirements.
+
+- There might be age-based restrictions.
+
+To resolve these issues, check your KYC/PAN status, verify your details and payment status, and ensure AutoPay is set up. If the problem persists, please contact customer support.

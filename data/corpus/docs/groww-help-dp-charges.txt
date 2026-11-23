@@ -1,0 +1,23 @@
+Customer Support
+
+Help and Support
+
+What are DP charges (depository participant charges)?
+
+When you sell shares from your Demat account on Groww, a DP charge is applied. This includes both the depository’s charge and Groww’s fee:
+
+- For debit (sale) values of ₹100 or more:
+
+- Male investors: ₹3.50 (Depository) + ₹16.50 (Groww) = ₹20.00 (plus GST)
+
+- Female investors: ₹3.25 (Depository) + ₹16.50 (Groww) = ₹19.75 (plus GST)
+
+- For debit (sale) values below ₹100:
+
+- Groww waives its fee.
+
+- Male investors pay only ₹3.50 (plus GST)
+
+- Female investors pay only ₹3.25 (plus GST)
+
+Note: These charges apply every time you sell shares on Groww. GST is added on top of these charges.

@@ -1,0 +1,10 @@
+# Railway Nixpacks build configuration (same pattern as the Zomato project)
+[phases.setup]
+nixPkgs = ["python312", "python312Packages.pip"]
+
+[phases.install]
+cmds = ["python -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
+
+[start]
+# Single worker: the in-process APScheduler must run exactly once.
+cmd = "uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1"

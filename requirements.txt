@@ -1,0 +1,23 @@
+# LLM
+groq==1.7.0
+
+# Web server
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.4
+python-dotenv==1.2.4
+
+# Retrieval / scheduling / MCP
+rank-bm25==0.2.2
+APScheduler==3.11.3
+mcp==2.3.0
+
+# Data collection (weekly review refresh + corpus rebuild)
+google-play-scraper==1.2.7
+requests==2.34.2
+beautifulsoup4==4.15.0
+pypdf==7.1.1
+
+# Tests / evals
+pytest
+httpx==0.28.1

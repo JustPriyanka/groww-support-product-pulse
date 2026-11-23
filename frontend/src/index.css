@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-size: 15px; }
+  h1 { @apply text-2xl font-semibold tracking-tight; }
+  h2 { @apply text-lg font-semibold; }
+  h3 { @apply text-base font-semibold; }
+  :focus-visible { outline: 2px solid #0E7C66; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium border transition-colors disabled:opacity-40 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-ink text-paper border-ink hover:bg-ink-soft; }
+  .btn-approve { @apply btn bg-verified text-white border-verified hover:brightness-110; }
+  .btn-quiet { @apply btn bg-white text-ink border-rule hover:border-ink-faint; }
+  .btn-danger { @apply btn bg-white text-blocked border-blocked/40 hover:bg-blocked-tint; }
+  .panel { @apply bg-white border border-rule rounded-lg; }
+  .field { @apply w-full rounded-md border border-rule bg-white px-3 py-2 text-sm focus:border-ink-soft focus:outline-none; }
+  .id { @apply font-mono text-[12px] text-ink-soft; }
+  .reply { @apply font-serif text-[16px] leading-7 text-ink; }
+}

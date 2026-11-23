@@ -1,0 +1,19 @@
+Customer Support
+
+Help and Support
+
+When are DP charges levied?
+
+DP charges apply when a scrip is debited from your demat account. These charges are calculated per sell transaction.
+
+Here's a breakdown of the charges:
+
+- Depository Charges:
+
+- ₹3.5 per sell transaction
+
+- ₹3.25 per sell transaction for women
+
+- Groww Charges: ₹16.5 per sell transaction(unless the sell value is under ₹100, then ₹0)
+
+- GST: An 18% GST applies to the total of Depository and Groww charges.

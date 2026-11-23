@@ -1,0 +1,373 @@
+[
+  {
+    "id": "groww-pricing",
+    "url": "https://groww.in/pricing",
+    "publisher": "Groww",
+    "title": "Groww Pricing — brokerage, DP and statutory charges",
+    "topics": [
+      "brokerage",
+      "dp_charges",
+      "statutory_charges",
+      "mtf_interest",
+      "hidden_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "43cce2ec1831a44a13bb33ffee34f29da1986299649316faff37bf2d14ca520a",
+    "chars": 5194,
+    "pii_redacted": [
+      "ACCOUNT_NUMBER"
+    ]
+  },
+  {
+    "id": "groww-pricing-mf",
+    "url": "https://groww.in/pricing/mutual-funds",
+    "publisher": "Groww",
+    "title": "Groww Pricing — Mutual Funds",
+    "topics": [
+      "mutual_funds"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "3f04b25ebccad45c7e370f62c37ad1f5c58bbb12d5cfae7b637563cd9921fe1d",
+    "chars": 2041,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-mtf",
+    "url": "https://groww.in/stocks/mtf",
+    "publisher": "Groww",
+    "title": "Groww Margin Trading Facility (MTF)",
+    "topics": [
+      "mtf_interest"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "b292f9e802db36420868649db5646a17417b62770a3276cb73623fff41baff19",
+    "chars": 6612,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-dp-charges",
+    "url": "https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1",
+    "publisher": "Groww",
+    "title": "Groww Help — What are DP charges?",
+    "topics": [
+      "dp_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "cadb6c2585eb38976c5c95c87e982e78c653299ab8dac887451370ec6eaf9f00",
+    "chars": 681,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-dp-when-levied",
+    "url": "https://groww.in/help/stocks,-f&o,-ipo-&-mtf/searchable/when-are-dp-charges-levied",
+    "publisher": "Groww",
+    "title": "Groww Help — When are DP charges levied?",
+    "topics": [
+      "dp_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "db343f1872dda25df54516c0530bef7af12126e081b5854029f1c6484440ca9f",
+    "chars": 473,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-dp-per-order",
+    "url": "https://groww.in/help/stocks,-f&o,-ipo-&-mtf/searchable/are-dp-charges-per-stock-or-per-order",
+    "publisher": "Groww",
+    "title": "Groww Help — Are DP charges per stock or per order?",
+    "topics": [
+      "dp_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "dd4f5c561861d7f0aaeb163d99231e96078eed74c4f0fc696a512ed9768430c6",
+    "chars": 679,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-fees-besides-brokerage",
+    "url": "https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93",
+    "publisher": "Groww",
+    "title": "Groww Help — Apart from brokerage, what fees am I charged?",
+    "topics": [
+      "hidden_charges",
+      "statutory_charges",
+      "dp_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "ab34fcde4cb6a10e6707b69bc62da32a5b8f1a5e8f59ac7696e8ade3c798ce3e",
+    "chars": 441,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-stock-charges",
+    "url": "https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1",
+    "publisher": "Groww",
+    "title": "Groww Help — How much does Groww charge for stocks?",
+    "topics": [
+      "brokerage",
+      "statutory_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "96cd08a753bd3820ccab6db822647ed3549d9156f3f59714c08dd7d031096c5b",
+    "chars": 1066,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-contract-note-charges",
+    "url": "https://groww.in/help/stocks,-f&o-&-ipo/order/what-amount-was-charged-for-my-order--86",
+    "publisher": "Groww",
+    "title": "Groww Help — What amount was charged for my order?",
+    "topics": [
+      "hidden_charges"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "4c7a3c249d7751f2bfed284180b84cf6de7dbec7589f98cfd90aed5a1ea58e44",
+    "chars": 570,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-sip-failed",
+    "url": "https://groww.in/help/mutual-funds/order/why-did-my-sip-installment-fail--36",
+    "publisher": "Groww",
+    "title": "Groww Help — Why did my SIP instalment fail?",
+    "topics": [
+      "sip"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "1f1ffa1c36660aa1225d68b19772d4f89ccbdeef541e51f5c9b45b88653492a0",
+    "chars": 1366,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-sip-skip-ecs",
+    "url": "https://groww.in/help/mutual-funds/discoverable/will-there-be-ecs-bounce-charges-or-any-penalties-if-i-skip-an-installment--49",
+    "publisher": "Groww",
+    "title": "Groww Help — ECS bounce charges when skipping an SIP instalment",
+    "topics": [
+      "sip"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "e05a9def341e67c65b5306889d20f034747954c5a2bceec2fc9bae749945bbff",
+    "chars": 546,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-withdraw-balance",
+    "url": "https://groww.in/help/my-account/payments/how-do-i-withdraw-money-from-my-groww-account-2",
+    "publisher": "Groww",
+    "title": "Groww Help — How do I withdraw money from my Groww account?",
+    "topics": [
+      "withdrawal"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "d6e5c41f24d0d9f32bb1d271e5ef3d9250f153f498d8554b16a880c030a18b2f",
+    "chars": 677,
+    "pii_redacted": []
+  },
+  {
+    "id": "groww-help-mf-redemption-timeline",
+    "url": "https://groww.in/help/payments-&-withdrawals/payments/when-will-i-get-the-redeemed-amount",
+    "publisher": "Groww",
+    "title": "Groww Help — When will I get the redeemed amount?",
+    "topics": [
+      "mf_redemption"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "6d988270394f6a382326b72365b7652f90c6c0dd28c8c9b5121e3ce1ce96546f",
+    "chars": 490,
+    "pii_redacted": []
+  },
+  {
+    "id": "hdfc-flexicap-kim",
+    "url": "https://files.hdfcfund.com/s3fs-public/KIM/2025-11/KIM%20-%20HDFC%20Flexi%20Cap%20Fund%20dated%20November%2021,%202025_1.pdf",
+    "publisher": "HDFC Mutual Fund",
+    "title": "HDFC Flexi Cap Fund — Key Information Memorandum (Nov 2025)",
+    "topics": [
+      "hdfc_flexi_cap",
+      "exit_load",
+      "expense_ratio"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "c14d47e04d5be136613cd9b055226ef4071baa66bc4a36fdcfcc2e1d6e203893",
+    "chars": 63100,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "hdfc-midcap-kim",
+    "url": "https://files.hdfcfund.com/s3fs-public/KIM/2025-11/KIM%20-%20HDFC%20Mid%20Cap%20Fund%20dated%20November%2021,%202025_1.pdf",
+    "publisher": "HDFC Mutual Fund",
+    "title": "HDFC Mid Cap Fund — Key Information Memorandum (Nov 2025)",
+    "topics": [
+      "hdfc_mid_cap",
+      "exit_load",
+      "expense_ratio"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "ba3d14ad1af8a7ef4bd678806521ee50ad87b1bbd9e63a33a01d01b471e77be1",
+    "chars": 64150,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "hdfc-smallcap-kim",
+    "url": "https://files.hdfcfund.com/s3fs-public/KIM/2025-11/KIM%20-%20HDFC%20Small%20Cap%20Fund%20dated%20November%2021,%202025_0.pdf",
+    "publisher": "HDFC Mutual Fund",
+    "title": "HDFC Small Cap Fund — Key Information Memorandum (Nov 2025)",
+    "topics": [
+      "hdfc_small_cap",
+      "exit_load",
+      "expense_ratio"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "355741e101a825e3cff9d94b401424bef33ed9e03b68fe3ec04de8bac7d29969",
+    "chars": 63102,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "hdfc-nifty50-kim",
+    "url": "https://files.hdfcfund.com/s3fs-public/KIM/2025-11/KIM%20-%20HDFC%20Nifty%2050%20Index%20Fund%20dated%20November%2021,%202025.pdf",
+    "publisher": "HDFC Mutual Fund",
+    "title": "HDFC Nifty 50 Index Fund — Key Information Memorandum (Nov 2025)",
+    "topics": [
+      "hdfc_nifty50_index",
+      "exit_load",
+      "expense_ratio"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "c2c4b90f6440ca6548d18f016fa9314f1a119b9cbe0d9775a69623beb29e2103",
+    "chars": 49216,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "hdfc-stamp-duty-faq",
+    "url": "https://files.hdfcfund.com/s3fs-public/2020-07/FAQs%20on%20Stamp%20Duty.pdf",
+    "publisher": "HDFC Mutual Fund",
+    "title": "HDFC Mutual Fund — FAQs on Stamp Duty",
+    "topics": [
+      "stamp_duty"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "84d8e16fd1ca97827a37753927e1967108f039cf87faebc7e1eca51e7821f593",
+    "chars": 8408,
+    "pii_redacted": []
+  },
+  {
+    "id": "sebi-dp-investor-charter",
+    "url": "https://www.sebi.gov.in/sebi_data/attachdocs/may-2024/1716996550779.pdf",
+    "publisher": "SEBI",
+    "title": "SEBI — Investor Charter for Depositories and Depository Participants (May 2024)",
+    "topics": [
+      "dp_charges"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "4d556522b5f66600e0e615f6aa203b9643d3eaf01188a178c3523ec668664a9e",
+    "chars": 22926,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "sebi-ter-circular-2018",
+    "url": "https://www.sebi.gov.in/sebi_data/attachdocs/jun-2018/1528207661617.pdf",
+    "publisher": "SEBI",
+    "title": "SEBI Circular — Total Expense Ratio disclosure (Jun 2018)",
+    "topics": [
+      "expense_ratio"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "21fe8e0cf7b9144cf6e8d5ae6ae1b7b9c4f1d6d41a8b8a487c9e12c1a722babf",
+    "chars": 4350,
+    "pii_redacted": [
+      "EMAIL"
+    ]
+  },
+  {
+    "id": "sebi-mf-investor-charter",
+    "url": "https://investor.sebi.gov.in/pdf/investor-charter/mf_amc_amfi.pdf",
+    "publisher": "SEBI",
+    "title": "SEBI — Investor Charter for Mutual Funds",
+    "topics": [
+      "mutual_funds"
+    ],
+    "type": "pdf",
+    "fetched_at": "2026-11-23",
+    "sha256": "4665b6ebf43946092e0cc2f6c556055528fa78cf3a748c6f1b0cbbe4859845ab",
+    "chars": 20162,
+    "pii_redacted": []
+  },
+  {
+    "id": "amfi-direct-vs-regular",
+    "url": "https://www.mutualfundssahihai.com/en/what-direct-plan-regular-plan",
+    "publisher": "AMFI",
+    "title": "AMFI (Mutual Funds Sahi Hai) — Direct plan vs regular plan",
+    "topics": [
+      "expense_ratio"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "718d5362b3db724d31b25135bc644851d2b3e2969bec3f455a9cfa682f97629b",
+    "chars": 1352,
+    "pii_redacted": [
+      "PERSON_NAME"
+    ]
+  },
+  {
+    "id": "amfi-expenses",
+    "url": "https://www.mutualfundssahihai.com/en/what-are-expenses-incurred-mutual-fund-scheme",
+    "publisher": "AMFI",
+    "title": "AMFI (Mutual Funds Sahi Hai) — Expenses incurred by a mutual fund scheme",
+    "topics": [
+      "expense_ratio"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "f529fbd3a183c2dff7aa8ebe65917be5516125a286dbc13378bb0960f11cb7af",
+    "chars": 1126,
+    "pii_redacted": [
+      "PERSON_NAME"
+    ]
+  },
+  {
+    "id": "amfi-exit-load",
+    "url": "https://www.mutualfundssahihai.com/en/what-are-loads",
+    "publisher": "AMFI",
+    "title": "AMFI (Mutual Funds Sahi Hai) — What are loads?",
+    "topics": [
+      "exit_load"
+    ],
+    "type": "html",
+    "fetched_at": "2026-11-23",
+    "sha256": "d23209b26df53f84aa920caf212f4fc6e9984765533692bb90332b476a00934c",
+    "chars": 1353,
+    "pii_redacted": [
+      "PERSON_NAME"
+    ]
+  }
+]

@@ -1,0 +1,136 @@
+"""
+Facts Agent — official corpus only.
+
+1. BM25 retrieval (scheme-aware) over sentence-ID'd chunks.
+2. LLM may only SELECT sentence IDs from the retrieved candidates and paraphrase them.
+3. Code keeps a fact only if every cited ID exists in the candidates and every number in the
+   claim appears in the cited sentences. No surviving fact -> "not_covered" + what was searched.
+"""
+from __future__ import annotations
+
+import logging
+import re
+
+from agents.schemas import Fact, FactsOutput
+from core.corpus import get_corpus, tokenize
+from core.intents import FEE_TYPE_LABELS, INTENT_LABELS, SCHEME_NAMES
+from core.llm import LLMUnavailable, chat_json
+from core.policy import find_advice, find_performance, numbers_in
+
+log = logging.getLogger("agents.facts")
+
+SYSTEM = """You are the Facts Agent for Groww customer support.
+You receive a customer question and numbered candidate sentences from OFFICIAL sources (AMC, SEBI, AMFI, Groww).
+Rules:
+- Use ONLY the candidate sentences. Never use general knowledge. If they do not answer the question, return covered=false.
+- Each fact must cite the sentence_ids it is based on, exactly as given.
+- Paraphrase minimally; keep every number, %, and ₹ amount exactly as written in the cited sentence.
+- Never include investment advice, recommendations, or return/performance figures, even if a sentence contains them.
+- Prefer facts that directly answer the question; at most 4 facts.
+Return JSON: {"covered": bool, "facts": [{"claim": str, "sentence_ids": [str]}], "missing": str}"""
+
+INTENT_QUERY_HINTS = {
+    "dp_charges": "DP charges depository participant charges debited when selling shares per scrip",
+    "brokerage": "brokerage charges per executed order equity delivery intraday",
+    "statutory_gst": "statutory charges GST STT stamp duty exchange transaction charges SEBI fee",
+    "hidden_charges": "charges brokerage DP charges statutory charges GST STT stamp duty contract note",
+    "mtf_interest": "MTF margin trading facility interest charges per day",
+    "exit_load": "exit load redeemed switched out within days of allotment",
+    "expense_ratio": "total expense ratio TER direct plan regular plan",
+    "stamp_duty_mf": "stamp duty 0.005% mutual fund purchase units allotment",
+    "sip_failure": "SIP instalment failed mandate bank bounce",
+    "mf_redemption": "redemption proceeds credited working days",
+    "withdrawal": "withdrawal balance bank account credited",
+    "kyc_account": "KYC account",
+}
+
+
+def _scheme_sources(scheme: str | None) -> set[str]:
+    if not scheme:
+        return set()
+    c = get_corpus()
+    return {s.id for s in c.sources.values() if scheme in s.topics}
+
+
+def _topic(question: str, intent: str, fee_type: str | None, scheme: str | None) -> str:
+    base = FEE_TYPE_LABELS.get(fee_type or "") or INTENT_LABELS.get(intent, "this question")
+    return f"{base} for {SCHEME_NAMES[scheme]}" if scheme else base
+
+
+def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
+        extra_query: str = "", source_restrict: set[str] | None = None) -> FactsOutput:
+    corpus = get_corpus()
+    query = " ".join(filter(None, [question, INTENT_QUERY_HINTS.get(intent, ""), SCHEME_NAMES.get(scheme or "", ""), extra_query]))
+    scheme_src = _scheme_sources(scheme)
+    hits = []
+    if scheme_src:
+        hits += corpus.search(query, k=4, source_filter=scheme_src)
+    hits += corpus.search(query, k=6, source_filter=source_restrict)
+    seen, chunks = set(), []
+    for c, s in hits:
+        if c.cid not in seen:
+            seen.add(c.cid)
+            chunks.append((c, s))
+    cand_ids: list[str] = []
+    # sentence-level hits first (precise facts buried in long PDFs), then chunk context
+    sent_hits = (corpus.search_sentences(query, k=6, source_filter=scheme_src) if scheme_src else []) + \
+        corpus.search_sentences(query, k=10, source_filter=source_restrict)
+    for sid, _ in sent_hits:
+        if sid not in cand_ids:
+            cand_ids.append(sid)
+    for c, _ in chunks:
+        for sid in c.sentence_ids:
+            if sid not in cand_ids:
+                cand_ids.append(sid)
+    cand_ids = cand_ids[:28]
+    searched = {
+        "query_terms": sorted(set(tokenize(query)))[:25],
+        "sources_considered": sorted({c.source_id for c, _ in chunks} | {corpus.sentences[s].source_id for s, _ in sent_hits}),
+        "top_chunks": [{"chunk": c.cid, "score": round(s, 2)} for c, s in chunks[:6]],
+        "scheme_filter": SCHEME_NAMES.get(scheme or ""),
+        "corpus_size": len(corpus.sources),
+    }
+    topic = _topic(question, intent, fee_type, scheme)
+    if not cand_ids:
+        return FactsOutput(status="not_covered", searched=searched, topic=topic, note="no retrieval hits")
+
+    listing = "\n".join(f"[{sid}] ({corpus.sources[corpus.sentences[sid].source_id].publisher}) {corpus.sentences[sid].text[:320]}" for sid in cand_ids)
+    mode = "llm"
+    try:
+        data = chat_json(SYSTEM, f"Customer question: {question}\n\nCandidate sentences:\n{listing}", purpose="facts", max_tokens=1500)
+        raw_facts = data.get("facts") or [] if data.get("covered", True) else []
+    except LLMUnavailable as e:
+        log.warning("facts agent LLM unavailable (%s); extractive fallback", e)
+        mode = "extractive"
+        q = set(tokenize(query, expand=True))
+        scored = sorted(cand_ids, key=lambda sid: -len(q & set(tokenize(corpus.sentences[sid].text))))
+        raw_facts = [{"claim": corpus.sentences[sid].text, "sentence_ids": [sid]} for sid in scored[:2]
+                     if len(q & set(tokenize(corpus.sentences[sid].text))) >= 3]
+
+    facts: list[Fact] = []
+    cand = set(cand_ids)
+    for f in raw_facts[:4]:
+        if not isinstance(f, dict):
+            continue
+        sids = [s for s in (f.get("sentence_ids") or []) if isinstance(s, str)]
+        claim = str(f.get("claim") or "").strip()
+        if not claim or not sids or any(s not in cand for s in sids):
+            continue  # invented / out-of-candidate citation -> dropped
+        src_ids = {corpus.sentences[s].source_id for s in sids}
+        if len(src_ids) != 1:
+            # keep the claim tied to one source for a clean citation; split by first source
+            first = corpus.sentences[sids[0]].source_id
+            sids = [s for s in sids if corpus.sentences[s].source_id == first]
+        quotes = [corpus.sentences[s].text for s in sids]
+        if not numbers_in(claim) <= numbers_in(" ".join(quotes)):
+            continue  # number not in cited text -> dropped
+        if find_advice(claim) or find_performance(claim):
+            continue
+        src = corpus.sources[corpus.sentences[sids[0]].source_id]
+        claim = re.sub(r"\s*\[\d+\]", "", claim)
+        facts.append(Fact(claim=claim, sentence_ids=sids, source_id=src.id, url=src.url, title=src.title,
+                          publisher=src.publisher, quotes=quotes, last_checked=src.fetched_at))
+    if not facts:
+        return FactsOutput(status="not_covered", searched=searched, topic=topic, mode=mode,
+                           note="retrieved sources did not contain a verifiable answer")
+    return FactsOutput(status="covered", facts=facts, searched=searched, topic=topic, mode=mode)
