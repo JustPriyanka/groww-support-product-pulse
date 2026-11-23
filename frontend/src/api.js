@@ -1,7 +1,8 @@
 /**
  * API client. Local dev: /api is proxied to :8000. Production: VITE_API_URL = Railway URL.
  */
-const BASE_URL = import.meta.env.VITE_API_URL ?? ''
+// Trim + drop trailing slashes: a stray space pasted into the Vercel env var broke every request.
+const BASE_URL = (import.meta.env.VITE_API_URL ?? '').trim().replace(/\/+$/, '')
 
 let passcode = sessionStorage.getItem('reviewerPasscode') || ''
 export const setPasscode = (p) => { passcode = p; sessionStorage.setItem('reviewerPasscode', p) }
