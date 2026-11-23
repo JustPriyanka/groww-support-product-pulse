@@ -90,4 +90,5 @@ Results: `evals/results/<timestamp>/` and `evals/results/latest.md`.
 | Pulse runs twice | more than one replica/worker | keep `numReplicas: 1`, `--workers 1` |
 | Slow replies (20–60 s) | Groq free tier 8k tokens/min | expected; the client-side limiter queues calls instead of failing |
 | “refresh_reviews: warn” in a run | Google Play blocks datacenter IPs | expected; falls back to committed snapshot |
+| Vercel `npm install` fails in `onnxruntime-node` (CUDA download 404) | transformers.js pulls the Node runtime, whose Linux install script fetches CUDA binaries | `frontend/vercel.json` sets `installCommand` with `ONNXRUNTIME_NODE_INSTALL_CUDA=skip` (browser build never uses it) |
 | Microphone button errors | browser without MediaRecorder / denied permission | type instead; see README voice limitations |
