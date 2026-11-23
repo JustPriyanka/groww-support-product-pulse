@@ -21,6 +21,10 @@ _PATTERNS: list[tuple[str, re.Pattern]] = [
     ("UPI_ID", re.compile(r"\b[A-Za-z0-9.\-_]{2,}@(?:ok[a-z]+|ybl|ibl|axl|upi|paytm|apl|yapl|ptyes|ptsbi|ptaxis|pthdfc|icici|sbi|hdfcbank|axisbank|kotak|barodampay|aubank|freecharge|jupiteraxis|slc|waicici|wahdfcbank|waaxis|wasbi)\b", re.I)),
     ("PAN", re.compile(r"\b[A-Z]{3}[ABCFGHLJPTK][A-Z]\d{4}[A-Z]\b", re.I)),
     ("IFSC", re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b")),
+    # Labelled identity numbers that do not match the strict format (typos, voice-transcription
+    # errors such as "PAN number is AYOPB57069"): the label is evidence enough.
+    ("PAN", re.compile(r"\bpan\b(?:\s*(?:card|number|no\b\.?|id))*\s*(?:is\s+)?[:#-]?\s*((?=(?:[A-Z]*\d){2})[A-Z0-9]{6,15})(?![\w-])", re.I)),
+    ("AADHAAR", re.compile(r"\baadh?aa?r\b(?:\s*(?:card|number|no\b\.?|id))*\s*(?:is\s+)?[:#-]?\s*(\d[\d\s-]{6,16}\d)(?![\w-])", re.I)),
     ("OTP", re.compile(r"\b(?:otp|one[\s-]?time[\s-]?password|verification code|pin)\b[^\d\n]{0,15}(\d{4,8})\b", re.I)),
     ("CARD", re.compile(r"(?<![\w-])(?:\d{4}[\s-]){3}\d{4}(?![\w-])")),
     ("AADHAAR", re.compile(r"(?<![\w₹-])(?<!rs\.)(?<!rs )[2-9]\d{3}[\s-]?\d{4}[\s-]?\d{4}(?![\w-])", re.I)),
@@ -28,7 +32,7 @@ _PATTERNS: list[tuple[str, re.Pattern]] = [
     # Generic long numeric identifiers (bank account, demat/BO id, folio, client code digits).
     ("ACCOUNT_NUMBER", re.compile(r"(?<![\w₹.,-])(?<!rs\.)(?<!rs )(?<!inr )\d{9,18}(?![\w.,-])", re.I)),
     # Explicitly labelled identifiers, any length >= 5
-    ("ACCOUNT_NUMBER", re.compile(r"\b(?:a/c|acct|account|folio|demat|dp|client|bo|customer|ucc|order)\b\.?\s*(?:no\b\.?|number|id|code|#)?\s*[:#-]?\s*((?=(?:[A-Z]*\d){3})[A-Z0-9]{5,20}(?:/\d{1,6})?)(?![\w-])", re.I)),
+    ("ACCOUNT_NUMBER", re.compile(r"\b(?:a/c|acct|account|folio|demat|dp|client|bo|customer|ucc|order)\b\.?\s*(?:(?:no\b\.?|number|id|code|#)\s*(?:is\s+)?)?[:#-]?\s*((?=(?:[A-Z]*\d){3})[A-Z0-9]{5,20}(?:/\d{1,6})?)(?![\w-])", re.I)),
     # Self-identification of a person's name ("my name is X Y")
     ("PERSON_NAME", re.compile(r"\b(?i:my name is|i am|this is|name:)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})", re.UNICODE)),
     ("PERSON_NAME", re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Shri|Smt|Dr)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)")),

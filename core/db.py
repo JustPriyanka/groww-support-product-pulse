@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 import threading
 from contextlib import contextmanager
@@ -9,8 +10,9 @@ from datetime import datetime, timezone
 from typing import Any, Iterator
 
 from config import APP_DB
-from core.pii import contains_pii
+from core.pii import contains_pii, redact
 
+log = logging.getLogger("db")
 _lock = threading.RLock()
 
 SCHEMA = """
@@ -117,6 +119,31 @@ def init_db() -> None:
     with _lock:
         conn().executescript(SCHEMA)
         conn().commit()
+    scrub_pii()
+
+
+def scrub_pii() -> int:
+    """Re-redact stored text with the current detectors. Runs at startup so that when a
+    detector is improved, rows written before the fix (e.g. a malformed PAN that slipped
+    through) are cleaned too. Returns the number of cells changed; values are never logged."""
+    changed = 0
+    with tx() as c:
+        tables = [r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")]
+        for t in tables:
+            cols = [r[1] for r in c.execute(f"PRAGMA table_info({t})") if (r[2] or "").upper() == "TEXT"]
+            for row in c.execute(f"SELECT id, {', '.join(cols)} FROM {t}").fetchall() if cols else []:
+                fixes = {}
+                for col in cols:
+                    v = row[col]
+                    if isinstance(v, str) and contains_pii(v):
+                        fixes[col] = redact(v).text
+                if fixes:
+                    sets = ",".join(f"{k}=?" for k in fixes)
+                    c.execute(f"UPDATE {t} SET {sets} WHERE id=?", [*fixes.values(), row["id"]])
+                    changed += len(fixes)
+    if changed:
+        log.warning("pii scrub: re-redacted %d stored cell(s)", changed)
+    return changed
 
 
 @contextmanager
