@@ -23,7 +23,7 @@ Browser ─▶ Vercel (React, static)  ──HTTPS JSON──▶  Railway (FastA
 | State | Stateless (dataset cache) | **Railway volume at `/data`** — approvals, drafts, canonical explainers and the MCP workspace must survive redeploys |
 | Workers | default | **exactly 1 worker** — the in-process scheduler must fire once per week |
 | Scheduled work | none | APScheduler cron + manual `POST /api/pulse/run` |
-| Builder | Nixpacks | Nixpacks pinned in `railway.json` (new Railway services default to Railpack) |
+| Builder | Nixpacks, `pip install` into Nix Python | Nixpacks pinned in `railway.json`; deps installed into `/opt/venv` because Nix Python is read-only (PEP 668 — the first deploy failed with `externally-managed-environment`) |
 | Secrets | `GROQ_API_KEY` | + `APPROVAL_SECRET` (HMAC for approval tokens) |
 | Health check | `/api/health` | `/api/health` (corpus/reviews load in < 3 s, so no background loading needed) |
 

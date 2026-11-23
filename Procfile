@@ -1,1 +1,1 @@
-web: uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1
+web: /opt/venv/bin/python -m uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1

@@ -1,12 +1,10 @@
-# Railway Nixpacks build configuration (same as the Zomato project)
-# https://nixpacks.com/docs/config
-
-[phases.setup]
-nixPkgs = ["python312", "python312Packages.pip"]
+# Railway Nixpacks build configuration.
+# Python 3.12 comes from .python-version (Nixpacks Python provider). Nix's Python is read-only
+# (PEP 668 "externally-managed-environment"), so dependencies go into a virtualenv at /opt/venv.
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt"]
 
 [start]
 # Single worker: the in-process APScheduler must run exactly once.
-cmd = "uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1"
+cmd = "/opt/venv/bin/python -m uvicorn api:app --host 0.0.0.0 --port $PORT --workers 1"
