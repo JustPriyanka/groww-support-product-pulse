@@ -39,4 +39,4 @@ def test_market_scoped_question_needs_scoped_facts(monkeypatch):
     monkeypatch.setattr(facts, "chat_json", lambda *a, **k: {"covered": True, "facts": [{"claim": "STT applies.", "sentence_ids": [sid]}]})
     monkeypatch.setattr(facts.get_corpus(), "search_sentences", lambda *a, **k: [(sid, 1.0)])
     out = facts.run("How is tax deducted on dividends from US stocks?", "statutory_gst", "statutory_charges", None)
-    assert out.status == "not_covered" and "US stocks" in out.note
+    assert out.status == "not_covered" and "US stocks" in out.note and out.topic == "US stocks"

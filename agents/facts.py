@@ -174,5 +174,7 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
     if not facts:
         note = (f"official sources do not cover {scope[0]}" if scope and raw_facts
                 else "retrieved sources did not contain a verifiable answer")
+        if scope:
+            topic = scope[0]  # name the market asked about, not the keyword-guessed fee type
         return FactsOutput(status="not_covered", searched=searched, topic=topic, mode=mode, note=note)
     return FactsOutput(status="covered", facts=facts, searched=searched, topic=topic, mode=mode)
