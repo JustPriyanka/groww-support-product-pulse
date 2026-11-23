@@ -50,6 +50,18 @@ INTENT_QUERY_HINTS = {
 }
 
 
+# Questions scoped to a market the official corpus does not describe must not be answered
+# with facts about a different market (e.g. Indian STT/stamp duty for "tax on US-stock
+# dividends"). A fact survives only if its cited text or section mentions the scope.
+SCOPES = {
+    "US stocks": re.compile(r"\b(?:us|u\.s\.|american)\s+(?:stocks?|shares?|markets?|equit\w*)|\bnasdaq\b|\bnyse\b", re.I),
+}
+
+
+def _scope_of(question: str) -> tuple[str, re.Pattern] | None:
+    return next(((name, rx) for name, rx in SCOPES.items() if rx.search(question)), None)
+
+
 def _with_leads(sids: list[str]) -> list[str]:
     """A cited bullet ("- Male investors: ₹20.00") is only correct together with the line it
     hangs off ("For debit (sale) values of ₹100 or more:"), so cite that line too."""
@@ -134,6 +146,7 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
 
     facts: list[Fact] = []
     cand = set(cand_ids)
+    scope = _scope_of(question)
     for f in raw_facts[:4]:
         if not isinstance(f, dict):
             continue
@@ -152,11 +165,14 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
             continue  # number not in cited text -> dropped
         if find_advice(claim) or find_performance(claim):
             continue
+        if scope and not any(scope[1].search(corpus.sentences[s].context_text()) for s in sids):
+            continue  # fact is about a different market than the question
         src = corpus.sources[corpus.sentences[sids[0]].source_id]
         claim = re.sub(r"\s*\[\d+\]", "", claim)
         facts.append(Fact(claim=claim, sentence_ids=sids, source_id=src.id, url=src.url, title=src.title,
                           publisher=src.publisher, quotes=quotes, last_checked=src.fetched_at))
     if not facts:
-        return FactsOutput(status="not_covered", searched=searched, topic=topic, mode=mode,
-                           note="retrieved sources did not contain a verifiable answer")
+        note = (f"official sources do not cover {scope[0]}" if scope and raw_facts
+                else "retrieved sources did not contain a verifiable answer")
+        return FactsOutput(status="not_covered", searched=searched, topic=topic, mode=mode, note=note)
     return FactsOutput(status="covered", facts=facts, searched=searched, topic=topic, mode=mode)

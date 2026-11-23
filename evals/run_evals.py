@@ -55,7 +55,10 @@ class Eval:
         for attempt in range(3):
             try:
                 r = self.c.request(method, path, **kw)
-                self.responses.append(r.text)
+                # /api/debug/* (DB export, logs) are scanned separately as raw data; their JSON
+                # escaping turns "types=['OTP']\n<timestamp>" into a fake OTP match here.
+                if not path.startswith("/api/debug/"):
+                    self.responses.append(r.text)
                 return r
             except httpx.HTTPError as e:
                 if attempt == 2:

@@ -29,3 +29,14 @@ def test_env_values_are_cleaned():
     assert _clean('  "gsk_abc" \n') == "gsk_abc"
     assert _clean("   ") is None
     assert _clean(None) is None
+
+
+def test_market_scoped_question_needs_scoped_facts(monkeypatch):
+    # Q: tax on US-stock dividends. A model "answer" built from Indian statutory charges must be dropped.
+    import agents.facts as facts
+    from core.corpus import get_corpus
+    sid = next(s.sid for s in get_corpus().sentences.values() if s.citable and "STT" in s.text)
+    monkeypatch.setattr(facts, "chat_json", lambda *a, **k: {"covered": True, "facts": [{"claim": "STT applies.", "sentence_ids": [sid]}]})
+    monkeypatch.setattr(facts.get_corpus(), "search_sentences", lambda *a, **k: [(sid, 1.0)])
+    out = facts.run("How is tax deducted on dividends from US stocks?", "statutory_gst", "statutory_charges", None)
+    assert out.status == "not_covered" and "US stocks" in out.note
