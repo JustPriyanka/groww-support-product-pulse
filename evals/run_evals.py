@@ -326,24 +326,38 @@ class Eval:
         return res
 
     # ---------------------------------------------------------------- weekly-loop audit
+    def reviews(self, ids) -> dict[str, dict]:
+        """Committed snapshot, plus the server's live set for reviews the weekly refresh pulled
+        after the snapshot. An ID neither knows about stays missing (and fails the check)."""
+        ids = list(dict.fromkeys(ids))
+        out = {rid: REVIEWS[rid] for rid in ids if rid in REVIEWS}
+        missing = [rid for rid in ids if rid not in out]
+        for i in range(0, len(missing), 300):
+            got = self.req("GET", "/api/reviews", params={"ids": ",".join(missing[i:i + 300])}).json()["reviews"]
+            out.update({r["review_id"]: {"review_date": r["date"], "text": r["text"]} for r in got})
+        return out
+
     def weekly_audit(self, run: dict) -> list[dict]:
         claims = []
+        known = self.reviews([rid for t in run["themes"]["themes"] for rid in t["review_ids"]]
+                             + [qt["review_id"] for qt in run["themes"]["quotes"]]
+                             + list((run.get("fee_confusion") or {}).get("review_ids", [])))
         ws, we = date.fromisoformat(run["window_start"]), date.fromisoformat(run["window_end"])
         themes = run["themes"]["themes"]
         self.check("feasibility", "<= 5 themes, top 3 identified", len(themes) <= 5 and len(run["themes"]["top3"]) == 3, len(themes))
         for t in themes:
-            in_win = all(rid in REVIEWS and ws <= date.fromisoformat(REVIEWS[rid]["review_date"]) <= we for rid in t["review_ids"])
+            in_win = all(rid in known and ws <= date.fromisoformat(known[rid]["review_date"]) <= we for rid in t["review_ids"])
             self.check("grounding", f"theme '{t['name']}': {t['count']} review IDs, all real and inside {ws}..{we}", in_win and t["count"] == len(t["review_ids"]) > 0)
             claims.append({"loop": "weekly", "claim": f"Theme '{t['name']}' = {t['count']} reviews", "valid": in_win, "evidence": t["review_ids"][:5]})
         for qt in run["themes"]["quotes"]:
-            rv = REVIEWS.get(qt["review_id"])
+            rv = known.get(qt["review_id"])
             ok = bool(rv) and qt["quote"] in " ".join(rv["text"].split()) and not contains_pii(qt["quote"])
             self.check("grounding", f"quote from {qt['review_id']} is verbatim and PII-free", ok)
             claims.append({"loop": "weekly", "claim": f"Quote: {qt['quote'][:80]}", "valid": ok, "evidence": [qt["review_id"]]})
         self.check("feasibility", "exactly 3 quotes", len(run["themes"]["quotes"]) == 3)
         conf = run.get("fee_confusion") or {}
         if conf:
-            ok = all(rid in REVIEWS for rid in conf["review_ids"])
+            ok = all(rid in known for rid in conf["review_ids"])
             self.check("grounding", f"fee confusion ({conf['fee_type']}) traces to {conf['count']} review IDs + window", ok and bool(conf["window"]))
             claims.append({"loop": "weekly", "claim": f"Fee confusion: {conf['statement']}", "valid": ok, "evidence": conf["review_ids"][:5]})
         self.check("feasibility", f"pulse <= 250 words ({run['pulse']['words']})", run["pulse"]["words"] <= 250)

@@ -131,7 +131,9 @@ def fetch_new(since, max_fetch: int = 3000) -> dict:
                         "collected_at": collected_at})
         if (oldest and oldest < start) or token is None:
             break
-    with open(REVIEWS_CSV, encoding="utf-8") as f:
+    # Merge into the existing live copy, not the snapshot: rebuilding from the snapshot would drop
+    # reviews an earlier refresh added (and that published pulses already cite).
+    with open(REVIEWS_LIVE_CSV if REVIEWS_LIVE_CSV.exists() else REVIEWS_CSV, encoding="utf-8") as f:
         base = list(csv.DictReader(f))
     seen = {r["review_id"] for r in base}
     added = [r for r in new if r["review_id"] not in seen]
