@@ -60,13 +60,14 @@ SCOPES = {
 }
 
 
-# Pricing rows that apply only to a specific audience or event. Citing them for a general
+# Pricing rows that apply only to a specific audience, product or event. Citing them for a general
 # question states the wrong figure (the NRI row "0.10% with min ₹100" was given to residents).
 # A sentence under such a section is usable only when the question names the same audience.
 AUDIENCE_SECTIONS = {
     "NRI": re.compile(r"\bNRIs?\b|non[- ]resident", re.I),
     "buyback": re.compile(r"\bbuy[- ]?backs?\b", re.I),
     "OFS": re.compile(r"\bOFS\b|offer for sale", re.I),
+    "MTF": re.compile(r"\bMTF\b|margin trading", re.I),
 }
 
 

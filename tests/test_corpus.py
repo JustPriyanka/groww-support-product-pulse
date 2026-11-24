@@ -91,3 +91,14 @@ def test_scheme_question_ignores_other_schemes_documents(monkeypatch):
     out = facts.run("Is there an exit load on HDFC Mid Cap Fund if I redeem after 6 months?", "exit_load", "exit_load", "hdfc_mid_cap")
     assert all(f.source_id != "hdfc-nifty50-kim" for f in out.facts)
     assert other not in seen["prompt"]  # the other fund's sentences are not even offered to the model
+
+
+def test_mtf_section_not_used_for_brokerage_question(monkeypatch):
+    # Deployed run 11: the brokerage explainer listed "Intraday to MTF conversion - 0.1% per order".
+    import agents.facts as facts
+    sid = next(s.sid for s in get_corpus().sentences.values() if s.section == "Intraday to MTF conversion charges" and s.citable)
+    monkeypatch.setattr(facts, "chat_json", lambda *a, **k: {"covered": True, "facts": [
+        {"claim": "MTF buy order charges are 0.1% per order of the order value.", "sentence_ids": [sid]}]})
+    monkeypatch.setattr(facts.get_corpus(), "search_sentences", lambda *a, **k: [(sid, 1.0)])
+    assert facts.run("How much brokerage does Groww charge?", "brokerage", "brokerage", None).status == "not_covered"
+    assert facts.run("What does converting intraday to MTF cost?", "mtf_interest", "mtf_interest", None).status == "covered"
