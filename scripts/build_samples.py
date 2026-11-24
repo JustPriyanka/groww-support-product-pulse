@@ -141,10 +141,10 @@ def main() -> None:
          "The backend never writes these; each entry carries the approved action id and the payload hash the approver saw.", ""]
     for doc in ws["contents"].values():
         w += [f"## Document: {doc['title']} ({len(doc['entries'])} entries)", ""]
-        for e in doc["entries"][-2:]:
+        for e in doc["entries"][-1:]:
             w += [f"### Entry {e['id']} — action #{e['action_id']} — {e['created_at']}", f"payload sha256 `{e['payload_sha256']}`", "", e["body"], ""]
     w += ["## Email drafts (stored as drafts; no send tool exists)", ""]
-    for e in ws.get("email_drafts", [])[-2:]:
+    for e in ws.get("email_drafts", [])[-1:]:
         w += [f"### Draft {e.get('id')} — action #{e.get('action_id')} — status `{e.get('status')}`",
               f"**To:** {e.get('to_label')}  ", f"**Subject:** {e.get('subject')}", "", e.get("body", ""), ""]
     if not ws.get("email_drafts"):

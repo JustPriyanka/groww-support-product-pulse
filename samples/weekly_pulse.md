@@ -56,10 +56,10 @@ Last checked: 2026-11-23
 
 ## Pending actions created by this run (each approved separately)
 
-- #31 `doc_append` → MCP append_doc_entry → document 'Weekly Product Pulse' (weekly-product-pulse) — **pending**
-- #32 `email_draft` → MCP create_email_draft → draft addressed to 'Product Team (internal distribution list)' (saved as draft, never sent) — **pending**
-- #33 `doc_append` → MCP append_doc_entry → document 'Customer Fee Explainers' (customer-fee-explainers) — **pending**
-- #34 `canonical_publish` → Canonical answer store → fee 'brokerage', scheme scope 'all / platform-wide' — **pending**
+- #31 `doc_append` → MCP append_doc_entry → document 'Weekly Product Pulse' (weekly-product-pulse) — **executed**
+- #32 `email_draft` → MCP create_email_draft → draft addressed to 'Product Team (internal distribution list)' (saved as draft, never sent) — **executed**
+- #33 `doc_append` → MCP append_doc_entry → document 'Customer Fee Explainers' (customer-fee-explainers) — **executed**
+- #34 `canonical_publish` → Canonical answer store → fee 'brokerage', scheme scope 'all / platform-wide' — **executed**
 
 ## Run steps
 
