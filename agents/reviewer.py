@@ -31,6 +31,9 @@ def _check_citations(citations: list[Citation]) -> list[ReviewFlag]:
     return flags
 
 
+MAX_SENTENCE_WORDS = 40  # longer "sentences" in practice are pasted tables / legal clauses
+
+
 def review_reply(reply: str, citations: list[Citation], last_checked: str | None) -> ReviewResult:
     flags: list[ReviewFlag] = []
     sentences = split_sentences(reply)
@@ -44,6 +47,8 @@ def review_reply(reply: str, citations: list[Citation], last_checked: str | None
     for s in sentences:
         if is_template_sentence(s):
             continue
+        if len(CITE_RE.sub("", s).split()) > MAX_SENTENCE_WORDS:
+            flags.append(ReviewFlag(code="TOO_LONG", detail=f"sentence over {MAX_SENTENCE_WORDS} words", sentence=s[:120]))
         ns = [int(x) for x in CITE_RE.findall(s)]
         if not ns:
             flags.append(ReviewFlag(code="UNCITED_CLAIM", detail="sentence has no citation", sentence=s))

@@ -12,6 +12,7 @@ import json
 import logging
 import re
 
+from agents.facts import _audience_mismatch
 from agents.schemas import Citation, ComplianceOutput, FactsOutput, PatternOutput, Routing
 from config import MAX_REPLY_SENTENCES
 from core import db
@@ -36,8 +37,9 @@ Return JSON {{"sentences": [{{"text": str, "facts": [int]}}]}} where facts are f
 
 
 # --------------------------------------------------------------------------- canonical reuse
-def find_canonical(intent: IntentResult) -> dict | None:
-    """Reuse only if fee type matches, scheme scope matches, and sources are unchanged."""
+def find_canonical(intent: IntentResult, question: str = "") -> dict | None:
+    """Reuse only if fee type matches, scheme scope matches, sources are unchanged, and no bullet
+    cites an audience-specific row (NRI / buyback / OFS) the question is not about."""
     if not intent.fee_type:
         return None
     corpus = get_corpus()
@@ -51,6 +53,9 @@ def find_canonical(intent: IntentResult) -> dict | None:
         hashes = row.get("source_hashes") or {}
         if any(sid not in corpus.sources or corpus.sources[sid].sha256 != h for sid, h in hashes.items()):
             continue  # source coverage changed since approval
+        sids = [sid for b in row.get("bullets") or [] for sid in b.get("sentence_ids", []) if sid in corpus.sentences]
+        if _audience_mismatch(question, sids):
+            continue
         return row
     return None
 

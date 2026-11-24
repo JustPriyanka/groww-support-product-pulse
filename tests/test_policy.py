@@ -28,3 +28,17 @@ def test_sentence_split_keeps_rs_and_decimals():
 def test_numbers_ignore_index_names_and_markers():
     assert numbers_in("HDFC Nifty 50 Index Fund is 0.20% [1]") == {"0.2"}
     assert numbers_in("₹1,00,000 within 365 days") == {"100000", "365"}
+
+
+def test_performance_table_is_detected():
+    # Leaked by the deployed system for "What returns did HDFC Mid Cap Fund give in the last 3 years?"
+    from core.policy import find_performance
+    leaked = ("Absolute returns for each financial year for last 5 years^ Period Returns (%)^ Benchmark Returns (%)# "
+              "Last 1 Year -1.27 -5.18 Last 3 Years 25.15 22.44 Since Inception* 17.55 15.16")
+    assert find_performance(leaked)
+    assert find_performance("Since Inception 17.55")
+    assert find_performance("Last 3 Years 25.15 22.44")
+    for ok in ("No Exit Load is payable if Units are redeemed after 1 year from the date of allotment.",
+               "An Exit Load of 1% is payable if Units are redeemed within 1 year.",
+               "The total expense ratio of the Direct Plan is 0.20% per annum."):
+        assert not find_performance(ok), ok

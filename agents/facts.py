@@ -24,6 +24,8 @@ You receive a customer question and numbered candidate sentences from OFFICIAL s
 Rules:
 - Use ONLY the candidate sentences. Never use general knowledge. If they do not answer the question, return covered=false.
 - Each fact must cite the sentence_ids it is based on, exactly as given.
+- Each claim is ONE plain sentence of at most 30 words that a customer can read. Never copy table
+  rows, form templates, or long legal clauses; if the relevant sentence is a table or template, leave it out.
 - Paraphrase minimally; keep every number, %, and ₹ amount exactly as written in the cited sentence.
 - Never include investment advice, recommendations, or return/performance figures, even if a sentence contains them.
 - A [bracketed] prefix is the section heading the sentence sits under. Respect it: a sentence under
@@ -58,6 +60,25 @@ SCOPES = {
 }
 
 
+# Pricing rows that apply only to a specific audience or event. Citing them for a general
+# question states the wrong figure (the NRI row "0.10% with min ₹100" was given to residents).
+# A sentence under such a section is usable only when the question names the same audience.
+AUDIENCE_SECTIONS = {
+    "NRI": re.compile(r"\bNRIs?\b|non[- ]resident", re.I),
+    "buyback": re.compile(r"\bbuy[- ]?backs?\b", re.I),
+    "OFS": re.compile(r"\bOFS\b|offer for sale", re.I),
+}
+
+
+MAX_FACT_WORDS = 40
+
+
+def _audience_mismatch(question: str, sids: list[str]) -> bool:
+    corpus = get_corpus()
+    return any(rx.search(corpus.sentences[s].section) and not rx.search(question)
+               for s in sids for rx in AUDIENCE_SECTIONS.values())
+
+
 def _scope_of(question: str) -> tuple[str, re.Pattern] | None:
     return next(((name, rx) for name, rx in SCOPES.items() if rx.search(question)), None)
 
@@ -83,6 +104,13 @@ def _scheme_sources(scheme: str | None) -> set[str]:
         return set()
     c = get_corpus()
     return {s.id for s in c.sources.values() if scheme in s.topics}
+
+
+def _other_scheme_sources(scheme: str | None) -> set[str]:
+    if not scheme:
+        return set()
+    c = get_corpus()
+    return {s.id for s in c.sources.values() if any(t in SCHEME_NAMES and t != scheme for t in s.topics)}
 
 
 def _topic(question: str, intent: str, fee_type: str | None, scheme: str | None) -> str:
@@ -115,7 +143,9 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
         for sid in c.sentence_ids:
             if sid not in cand_ids and corpus.sentences[sid].citable:  # headings: context only
                 cand_ids.append(sid)
-    cand_ids = cand_ids[:28]
+    # a question about one fund must not be answered from another fund's KIM
+    other_src = _other_scheme_sources(scheme)
+    cand_ids = [sid for sid in cand_ids if corpus.sentences[sid].source_id not in other_src][:28]
     searched = {
         "query_terms": sorted(set(tokenize(query)))[:25],
         "sources_considered": sorted({c.source_id for c, _ in chunks} | {corpus.sentences[s].source_id for s, _ in sent_hits}),
@@ -163,8 +193,12 @@ def run(question: str, intent: str, fee_type: str | None, scheme: str | None,
         quotes = [corpus.sentences[s].text for s in sids]
         if not numbers_in(claim) <= numbers_in(" ".join(quotes)):
             continue  # number not in cited text -> dropped
+        if len(claim.split()) > MAX_FACT_WORDS:
+            continue  # verbatim dump of a table / legal clause, not a readable fact
         if find_advice(claim) or find_performance(claim):
             continue
+        if _audience_mismatch(question, sids):
+            continue  # NRI / buyback / OFS row cited for a question that is not about it
         if scope and not any(scope[1].search(corpus.sentences[s].context_text()) for s in sids):
             continue  # fact is about a different market than the question
         src = corpus.sources[corpus.sentences[sids[0]].source_id]

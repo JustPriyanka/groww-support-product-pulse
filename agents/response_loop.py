@@ -99,7 +99,7 @@ def _run_agents(qid: int, rnd: int, text: str, ir, pii_types: list[str], which: 
 def _draft_cycle(qid: int, rnd: int, text: str, ir, facts: FactsOutput, pattern: PatternOutput, comp: ComplianceOutput,
                  *, feedback: str = "", fault: str | None = None, origin: str = "generated", allow_canonical: bool = True) -> dict:
     """orchestrator -> reviewer -> (one named correction) ; persists draft(s); returns final draft row."""
-    canon = find_canonical(ir) if allow_canonical else None
+    canon = find_canonical(ir, text) if allow_canonical else None
     version = (db.one("SELECT MAX(version) v FROM drafts WHERE question_id=?", qid)["v"] or 0) + 1
 
     def orchestrate(attempt: int, fb: str) -> tuple[str, list[Citation], str]:

@@ -60,6 +60,11 @@ _PERF_OUT = [
     r"\b(?:returns?|cagr)\s+(?:of|was|were|is|are)\b",
     r"\bwill\s+(?:earn|make|grow|double|give)\b",
     r"₹\s?[\d,]+\s+(?:would|will)\s+(?:have\s+)?(?:grown|become)",
+    # factsheet / KIM performance tables ("Returns (%) ... Last 3 Years 25.15 ... Since Inception 17.55")
+    r"\breturns?\s*\(%\)",
+    r"\b(?:last|past)\s+\d+\s+(?:years?|months?)\W{0,3}\s*-?\d+\.\d+",
+    r"\bsince\s+inception\W{0,3}\s*-?\d+\.\d+",
+    r"\bcompounded\s+annuali[sz]ed\b",
 ]
 
 

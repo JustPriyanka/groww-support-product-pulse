@@ -32,3 +32,9 @@ def test_advice_performance_pii_length_lastchecked():
 def test_templates_need_no_citation():
     from core.policy import NO_ADVICE_SENTENCE, not_covered_sentence
     assert review_reply(f"{NO_ADVICE_SENTENCE} {not_covered_sentence('F&O margin and trading rules')}", [], "2026-11-23").passed
+
+def test_document_dump_sentence_is_too_long():
+    dump = ("Total Expense Ratio (TER) for Mutual Fund Schemes Name of Scheme: XYZ Date (DD/MM/ YYYY) Regular Plan "
+            "Direct Plan Base TER Additional expense as per Regulation 52 GST Total TER Base TER Additional expense "
+            "as per Regulation 52 GST Total TER and further columns of the template [1].")
+    assert "TOO_LONG" in codes(review_reply(dump, [_cit()], "2026-11-23"))
