@@ -224,6 +224,8 @@ The runner pushes 46 questions through the live system: 26 real review complaint
 
 It takes about 1 h 45 min on the Groq free tier. Plan: [`Docs/eval.md`](Docs/eval.md).
 
+**Evals report** (golden dataset, adversarial tests, scores): [`Docs/evals-report.md`](Docs/evals-report.md)
+
 **Latest full run against the deployed system** (24 Nov 2026): [`evals/results/latest.md`](evals/results/latest.md)
 
 | Area | Passed |
@@ -263,6 +265,7 @@ The lesson from the last-but-two row: automated checks verify *contracts* (cited
 | [`samples/weekly_pulse.md`](samples/weekly_pulse.md) | Latest weekly pulse, themes with review IDs, fee issue, fee explainer, pending actions, run steps |
 | [`samples/workspace.md`](samples/workspace.md) | Document entries and the email draft as written by the MCP server after approval |
 | [`samples/reviews_sample.csv`](samples/reviews_sample.csv) | 34 de-identified reviews from the latest window |
+| [`Docs/evals-report.md`](Docs/evals-report.md) | Evals report: golden dataset, adversarial tests, scores |
 | [`evals/results/latest.md`](evals/results/latest.md) | Latest full evaluation report |
 
 All except the CSV are regenerated from a live backend with `scripts/build_samples.py --base-url <backend>`.
