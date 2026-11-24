@@ -133,6 +133,8 @@ Full pulse, themes, quotes and actions: [`samples/weekly_pulse.md`](samples/week
 
 ## 6. Sources
 
+Full source manifest (all URLs, topics, source IDs): [`data/corpus/README.md`](data/corpus/README.md).
+
 AMC: **HDFC Mutual Fund**. Schemes: Flexi Cap, Mid Cap, Small Cap, Nifty 50 Index. Every page was fetched on 2026-11-23 and is stored with its sha256 in [`data/corpus/sources.json`](data/corpus/sources.json). Text is in `data/corpus/docs/`. Each sentence has a stable ID (`<source>#s<n>`), and only those IDs can be cited.
 
 | Publisher | Page |
