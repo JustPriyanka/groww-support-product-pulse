@@ -182,6 +182,9 @@ def build_explainer(conf: dict) -> tuple[dict | None, dict]:
     return explainer, rv.model_dump()
 
 
+PULSE_MAX_SIGNALS = 5  # signals arrive sorted by count; the rest are summarised as "+N more"
+
+
 def compose_pulse(window: dict, n_reviews: int, n_sub: int, top: list[dict], quotes: list[dict], conf: dict | None,
                   signals: list[dict]) -> str:
     theme_txt = "\n".join(f"{i}. {t['name']} — {t['count']} reviews, avg ★{t['avg_rating']}: {t['description']}" for i, t in enumerate(top, 1))
@@ -207,14 +210,20 @@ def compose_pulse(window: dict, n_reviews: int, n_sub: int, top: list[dict], quo
         if word_count(md) <= MAX_PULSE_WORDS:
             return md
         budget_note = " Be much shorter: observation <= 30 words, actions <= 14 words each."
-    # deterministic trim of action text only (never of evidence)
+    # deterministic trims, never of evidence: first list fewer repeated-question topics (the rest
+    # are counted as "+N more"), then shorten action text
+    shown = PULSE_MAX_SIGNALS
+    while word_count(md) > MAX_PULSE_WORDS and shown > 1:
+        shown -= 1
+        md = render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observation, ideas, shown)
     while word_count(md) > MAX_PULSE_WORDS and any(len(a.split()) > 6 for a in ideas):
         ideas = [" ".join(a.split()[:max(6, len(a.split()) - 2)]) for a in ideas]
-        md = render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observation, ideas)
+        md = render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observation, ideas, shown)
     return md
 
 
-def render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observation, ideas) -> str:
+def render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observation, ideas,
+                 max_signals: int = PULSE_MAX_SIGNALS) -> str:
     lines = [f"**Groww Weekly Product Pulse** · {window['start']} → {window['end']} · {n_reviews} Play Store reviews ({n_sub} substantive)", "",
              "**Top themes**"]
     for i, t in enumerate(top, 1):
@@ -226,7 +235,9 @@ def render_pulse(window, n_reviews, n_sub, top, quotes, conf, signals, observati
     if conf:
         lines += ["", f"**Fee confusion:** {conf['statement']} ({conf['count']} reviews, {conf['window']['start']} → {conf['window']['end']})"]
     if signals:
-        lines += ["", "**Repeated questions (≥5/week):** " + "; ".join(f"{s['label']} ×{s['count']}" for s in signals)]
+        more = len(signals) - max_signals
+        lines += ["", "**Repeated questions (≥5/week):** " + "; ".join(f"{s['label']} ×{s['count']}" for s in signals[:max_signals])
+                  + (f"; +{more} more" if more > 0 else "")]
     lines += ["", f"**Main observation:** {observation}", "", "**Product action ideas**"]
     lines += [f"{i}. {a}" for i, a in enumerate(ideas, 1)]
     return "\n".join(lines)

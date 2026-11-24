@@ -1,17 +1,17 @@
-# Evaluation report — 20261124T082206Z
+# Evaluation report — 20261124T091823Z
 
 Backend: `https://groww-support-product-pulse-production.up.railway.app`
 
-**497 / 502 checks passed** · 26 real review complaints · 80 claims audited (76 valid) · response-loop latency p50 50.7s, max 89.4s
+**496 / 497 checks passed** · 26 real review complaints · 83 claims audited (83 valid) · response-loop latency p50 64.3s, max 69.0s
 
 | Area | Passed | Total |
 |---|---|---|
 | agents | 135 | 135 |
 | compliance | 59 | 59 |
 | cross_loop | 8 | 8 |
-| feasibility | 186 | 186 |
+| feasibility | 185 | 186 |
 | gate | 1 | 1 |
-| grounding | 24 | 29 |
+| grounding | 24 | 24 |
 | isolation | 6 | 6 |
 | privacy | 60 | 60 |
 | refinement | 3 | 3 |
@@ -21,81 +21,77 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 
 ## Failures
 
-- **grounding** · theme 'Positive user experience': 55 review IDs, all real and inside 2026-11-17..2026-11-23 — `null`
-- **grounding** · theme 'Technical instability': 26 review IDs, all real and inside 2026-11-17..2026-11-23 — `null`
-- **grounding** · theme 'High fees & hidden charges': 12 review IDs, all real and inside 2026-11-17..2026-11-23 — `null`
-- **grounding** · theme 'Poor customer support & delays': 11 review IDs, all real and inside 2026-11-17..2026-11-23 — `null`
-- **grounding** · >= 15 claims audited across both loops (80 audited, 76 valid) — `[{"loop": "weekly", "claim": "Theme 'Positive user experience' = 55 reviews", "valid": false, "evidence": ["GP-dc52f44a37", "GP-a3e698cb9d", "GP-5d14c5c04f", "GP-53473f072e", "GP-321e2a3b51"]}, {"loop": "weekly", "claim": "Theme 'Technical instability' = 26 reviews", "valid": false, "evidence": ["GP`
+- **feasibility** · pulse <= 250 words (273) — `null`
 
 ## Notes
 
-- Reviewer demo: Q146 corrected; Q147 blocked with flags ['UNCITED_CLAIM']
+- Reviewer demo: Q200 corrected; Q201 blocked with flags ['UNCITED_CLAIM']
 
 ## Claim audit (sample)
 
 | Loop | Claim | Valid | Evidence |
 |---|---|---|---|
-| weekly | Theme 'Positive user experience' = 55 reviews | ❌ | GP-dc52f44a37, GP-a3e698cb9d |
-| weekly | Theme 'Technical instability' = 26 reviews | ❌ | GP-ffad96c266, GP-cde877cfad |
-| weekly | Theme 'High fees & hidden charges' = 12 reviews | ❌ | GP-5c5566c9b8, GP-7fd63c2a44 |
-| weekly | Theme 'Poor customer support & delays' = 11 reviews | ❌ | GP-c8028d3012, GP-f438efe735 |
-| weekly | Theme 'Security & privacy concerns' = 3 reviews | ✅ | GP-c5356fcf27, GP-c0b1223cf8 |
+| weekly | Theme 'Positive User Experience' = 72 reviews | ✅ | GP-dc52f44a37, GP-a3e698cb9d |
+| weekly | Theme 'App Performance & Bugs' = 20 reviews | ✅ | GP-cde877cfad, GP-9346fc9f8a |
+| weekly | Theme 'Hidden & High Charges' = 17 reviews | ✅ | GP-5c5566c9b8, GP-7fd63c2a44 |
+| weekly | Theme 'Customer Support & Account Problems' = 17 reviews | ✅ | GP-c8028d3012, GP-f438efe735 |
+| weekly | Theme 'Order Execution & Trade Issues' = 11 reviews | ✅ | GP-ffad96c266, GP-341c7efcb8 |
 | weekly | Quote: I have had a good experience using the Groww app. The interface is simple, user- | ✅ | GP-602a328052 |
-| weekly | Quote: A very useless app for trading often stuck and deliberately losing your money wi | ✅ | GP-59850cc4fb |
-| weekly | Quote: good app but has high brokerage charges | ✅ | GP-84eebde401 |
-| weekly | Fee confusion: Customers are confused about why Groww charges high brokerage and hidden fees for trading, espe | ✅ | GP-e704fd31f2, GP-5827444a78 |
-| weekly-explainer | Brokerage is the lower of ₹20 or 0.1% of trade value. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| weekly-explainer | The minimum brokerage charged per order is ₹5. | ✅ | https://groww.in/pricing |
-| weekly-explainer | Additional regulatory and statutory charges include STT, Stamp Duty, Exchange Transaction Charges, SEBI Turnov | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
-| weekly-explainer | A DP (Depository Participant) charge applies per order when you sell shares from your Demat account. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/searchable/are-dp-charges-per-stock-or-per-order |
-| response | Brokerage is the lower of ₹20 or 0.1% of trade value, ensuring a cap on fees per transaction [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Equity trades (delivery & intraday) charge 0.10% with a minimum of ₹100 per order; F&O ₹50/order; MF options a | ✅ | https://groww.in/pricing |
-| response | Brokerage is the lower of ₹20 or 0.1% of trade value, ensuring a cap on fees per transaction [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Equity trades (delivery & intraday) charge 0.10% with a minimum of ₹100 per order; F&O ₹50/order; MF options a | ✅ | https://groww.in/pricing |
-| response | Brokerage is the lower of ₹20 or 0.1% of trade value, ensuring a cap on fees per transaction [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Equity trades (delivery & intraday) charge 0.10% with a minimum of ₹100 per order; F&O ₹50/order; MF options a | ✅ | https://groww.in/pricing |
-| response | Brokerage is the lower of ₹20 or 0.1% of trade value, ensuring a cap on fees per transaction [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Equity trades (delivery & intraday) charge 0.10% with a minimum of ₹100 per order; F&O ₹50/order; MF options a | ✅ | https://groww.in/pricing |
-| response | Groww charges a brokerage fee for trading stocks that is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | The minimum brokerage charge is ₹5 per executed order [2]. | ✅ | https://groww.in/pricing |
-| response | In addition to brokerage, regulatory and statutory fees such as STT, Stamp Duty, Exchange Transaction Charges, | ✅ | https://groww.in/pricing, https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees- |
-| response | The brokerage fee for trading stocks is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | In addition to brokerage, regulatory and statutory charges such as STT, Stamp Duty, Exchange Transaction Charg | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
-| response | When selling shares, DP charges are ₹20.00 for male investors and ₹19.75 for female investors on transactions  | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | Groww’s brokerage fee for stock trades is the lower of ₹20 or 0.1% of the trade value, with a minimum charge o | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | When you sell shares, a depository participant (DP) charge also applies; for sale values of ₹100 or more male  | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | For sale values below ₹100, Groww waives its fee and only the DP charge of ₹3.50 (male) or ₹3.25 (female) plus | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | The brokerage fee for trading stocks is the lower of ₹20 or 0.1% of the trade value, with a minimum charge of  | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Exchange transaction charges are applied at 0.00307% on NSE trades and 0.00375% on BSE trades [2]. | ✅ | https://groww.in/pricing |
-| response | When you sell shares, a DP charge is applied each time you sell shares on Groww [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | For debit (sale) values of ₹100 or more, male investors pay ₹3.50 (Depository) + ₹16.50 (Groww) = ₹20.00 (plus | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | For debit (sale) values below ₹100, male investors pay only ₹3.50 (plus GST) and female investors pay only ₹3. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
-| response | GST is added on top of the brokerage and DP charges when you sell shares on Groww [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | Regulatory and statutory charges such as STT, Stamp Duty, Exchange Transaction Charges, SEBI Turnover Charges, | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
-| response | Charges beyond brokerage include regulatory and statutory fees such as STT, Stamp Duty, Exchange Transaction C | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
-| response | GST is added on top of these charges [2]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
-| response | When you sell shares valued at ₹100 or more, DP charges apply: male investors pay ₹3.50 (Depository) + ₹16.50  | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-margin/what-are-dp-charges-depository-participant-charges-1 |
+| weekly | Quote: If we have to see the chart of any company, then in 5 minutes the chart gets so  | ✅ | GP-febd5efd96 |
+| weekly | Quote: Groww is not beginner-friendly. The app looks simple, but its charges and fee st | ✅ | GP-f2b1e09a53 |
+| weekly | Fee confusion: Users are confused about why Groww charges high brokerage fees and other hidden costs, especial | ✅ | GP-e704fd31f2, GP-5827444a78 |
+| weekly-explainer | Groww charges a brokerage fee for trading stocks, which is the lower of ₹20 or 0.1% of your trade value. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| weekly-explainer | Equity (Delivery and Intraday) brokerage: 0.10% with min ₹ 100 per order / F&O: ₹50/order / MF: Direct & Prime | ✅ | https://groww.in/pricing |
+| response | Brokerage on stock trades is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Equity delivery and intraday trades charge 0.10% brokerage with a minimum of ₹100 per order [2]. | ✅ | https://groww.in/pricing |
+| response | F&O trades incur a flat brokerage fee of ₹50 per order [2]. | ✅ | https://groww.in/pricing |
+| response | Brokerage on stock trades is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Equity delivery and intraday trades charge 0.10% brokerage with a minimum of ₹100 per order [2]. | ✅ | https://groww.in/pricing |
+| response | F&O trades incur a flat brokerage fee of ₹50 per order [2]. | ✅ | https://groww.in/pricing |
+| response | Brokerage on stock trades is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Equity delivery and intraday trades charge 0.10% brokerage with a minimum of ₹100 per order [2]. | ✅ | https://groww.in/pricing |
+| response | F&O trades incur a flat brokerage fee of ₹50 per order [2]. | ✅ | https://groww.in/pricing |
+| response | Brokerage on stock trades is the lower of ₹20 or 0.1% of the trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Equity delivery and intraday trades charge 0.10% brokerage with a minimum of ₹100 per order [2]. | ✅ | https://groww.in/pricing |
+| response | F&O trades incur a flat brokerage fee of ₹50 per order [2]. | ✅ | https://groww.in/pricing |
+| response | The charges applicable on trades include regulatory and statutory fees such as STT, Stamp Duty, Exchange Trans | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
+| response | In addition, Groww charges a brokerage fee for stock trading that is the lower of ₹20 or 0.1% of the trade val | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | - Regulatory & Statutory Charges: STT, Stamp Duty, Exchange Transaction Charges, SEBI Turnover Charges, Invest | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
+| response | Groww charges a brokerage fee for trading stocks, which is the lower of ₹20 or 0.1% of your trade value [2]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Regulatory and statutory charges such as STT, stamp duty, exchange transaction charges, SEBI turnover charges  | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
+| response | A depository participant (DP) charge is levied when shares are sold from a Demat account on Groww [2]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | DP Charges (Depository Participant Charges): When you sell shares from your Demat account on Groww, a DP charg | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Groww charges a brokerage fee for trading stocks, which is the lower of ₹20 or 0.1% of your trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | DP Charges (Depository Participant Charges): When you sell shares from your Demat account on Groww, a DP charg | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Groww charges a brokerage fee for trading stocks, which is the lower of ₹20 or 0.1% of your trade value [1]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | - Regulatory & Statutory Charges: STT, Stamp Duty, Exchange Transaction Charges, SEBI Turnover Charges, Invest | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
+| response | Additional charges like regulatory fees and statutory charges are not from Groww but are levied by the exchang | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Regulatory and statutory charges such as STT, stamp duty, exchange transaction charges, SEBI turnover charges  | ✅ | https://groww.in/help/payments-&-withdrawals/payments-charges/apart-from-brokerage--what-fees-am-i-charged--93 |
+| response | The brokerage fee for stock trading is the lower of ₹20 or 0.1% of the trade value [2]. | ✅ | https://groww.in/help/stocks,-f&o,-ipo-&-mtf/sx-demat-account/how-much-does-groww-charge-for-stocks-1 |
+| response | Margin Trading Facility (MTF) lets you buy stocks by paying only a fraction of the order amount and Groww fund | ✅ | https://groww.in/stocks/mtf |
+| response | Margin Trading Facility (MTF) lets you buy stocks by paying only a fraction of the order amount and Groww fund | ✅ | https://groww.in/stocks/mtf |
+| response | For investments through systematic investment routes such as Systematic Investment Plans (SIP), Flex SIP, Syst | ✅ | https://files.hdfcfund.com/s3fs-public/KIM/2025-11/KIM%20-%20HDFC%20Nifty%2050%20Index%20Fund%20dated%20November%2021,%2 |
 
 ## All checks
 
-- ✅ weekly · manual trigger completes without intervention (133s)
+- ✅ weekly · manual trigger completes without intervention (257s)
 - ✅ weekly · pending actions created, none executed
 - ✅ feasibility · <= 5 themes, top 3 identified
-- ❌ grounding · theme 'Positive user experience': 55 review IDs, all real and inside 2026-11-17..2026-11-23
-- ❌ grounding · theme 'Technical instability': 26 review IDs, all real and inside 2026-11-17..2026-11-23
-- ❌ grounding · theme 'High fees & hidden charges': 12 review IDs, all real and inside 2026-11-17..2026-11-23
-- ❌ grounding · theme 'Poor customer support & delays': 11 review IDs, all real and inside 2026-11-17..2026-11-23
-- ✅ grounding · theme 'Security & privacy concerns': 3 review IDs, all real and inside 2026-11-17..2026-11-23
+- ✅ grounding · theme 'Positive User Experience': 72 review IDs, all real and inside 2026-11-17..2026-11-23
+- ✅ grounding · theme 'App Performance & Bugs': 20 review IDs, all real and inside 2026-11-17..2026-11-23
+- ✅ grounding · theme 'Hidden & High Charges': 17 review IDs, all real and inside 2026-11-17..2026-11-23
+- ✅ grounding · theme 'Customer Support & Account Problems': 17 review IDs, all real and inside 2026-11-17..2026-11-23
+- ✅ grounding · theme 'Order Execution & Trade Issues': 11 review IDs, all real and inside 2026-11-17..2026-11-23
 - ✅ grounding · quote from GP-602a328052 is verbatim and PII-free
-- ✅ grounding · quote from GP-59850cc4fb is verbatim and PII-free
-- ✅ grounding · quote from GP-84eebde401 is verbatim and PII-free
+- ✅ grounding · quote from GP-febd5efd96 is verbatim and PII-free
+- ✅ grounding · quote from GP-f2b1e09a53 is verbatim and PII-free
 - ✅ feasibility · exactly 3 quotes
 - ✅ grounding · fee confusion (brokerage) traces to 4 review IDs + window
-- ✅ feasibility · pulse <= 250 words (235)
+- ❌ feasibility · pulse <= 250 words (273)
 - ✅ compliance · pulse contains no PII
 - ✅ feasibility · fee explainer drafted
-- ✅ feasibility · explainer <= 6 bullets (4)
-- ✅ grounding · explainer has >= 2 official links (4)
+- ✅ feasibility · explainer <= 6 bullets (2)
+- ✅ grounding · explainer has >= 2 official links (2)
 - ✅ feasibility · explainer has Last checked
 - ✅ compliance · explainer neutral: no advice/performance
 - ✅ feasibility · real-GP-7bb551f804: produced a draft
@@ -219,7 +215,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-07c49fb2e8: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-07c49fb2e8: reply <= 3 sentences
 - ✅ feasibility · real-GP-07c49fb2e8: Last checked date present
-- ✅ grounding · real-GP-07c49fb2e8: not-covered names what was searched
 - ✅ agents · real-GP-07c49fb2e8: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-07c49fb2e8: agent-run records for all 5 components
 - ✅ privacy · real-GP-07c49fb2e8: agent runs do not store the input text
@@ -247,7 +242,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-04c7a21dcc: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-04c7a21dcc: reply <= 3 sentences
 - ✅ feasibility · real-GP-04c7a21dcc: Last checked date present
-- ✅ grounding · real-GP-04c7a21dcc: not-covered names what was searched
 - ✅ agents · real-GP-04c7a21dcc: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-04c7a21dcc: agent-run records for all 5 components
 - ✅ privacy · real-GP-04c7a21dcc: agent runs do not store the input text
@@ -275,7 +269,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-4db5f8ae08: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-4db5f8ae08: reply <= 3 sentences
 - ✅ feasibility · real-GP-4db5f8ae08: Last checked date present
-- ✅ grounding · real-GP-4db5f8ae08: not-covered names what was searched
 - ✅ agents · real-GP-4db5f8ae08: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-4db5f8ae08: agent-run records for all 5 components
 - ✅ privacy · real-GP-4db5f8ae08: agent runs do not store the input text
@@ -294,7 +287,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-1364659cbe: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-1364659cbe: reply <= 3 sentences
 - ✅ feasibility · real-GP-1364659cbe: Last checked date present
-- ✅ grounding · real-GP-1364659cbe: not-covered names what was searched
 - ✅ agents · real-GP-1364659cbe: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-1364659cbe: agent-run records for all 5 components
 - ✅ privacy · real-GP-1364659cbe: agent runs do not store the input text
@@ -304,6 +296,7 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-5628445fbf: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-5628445fbf: reply <= 3 sentences
 - ✅ feasibility · real-GP-5628445fbf: Last checked date present
+- ✅ grounding · real-GP-5628445fbf: not-covered names what was searched
 - ✅ agents · real-GP-5628445fbf: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-5628445fbf: agent-run records for all 5 components
 - ✅ privacy · real-GP-5628445fbf: agent runs do not store the input text
@@ -323,7 +316,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-de6ae14a56: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-de6ae14a56: reply <= 3 sentences
 - ✅ feasibility · real-GP-de6ae14a56: Last checked date present
-- ✅ grounding · real-GP-de6ae14a56: not-covered names what was searched
 - ✅ agents · real-GP-de6ae14a56: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-de6ae14a56: agent-run records for all 5 components
 - ✅ privacy · real-GP-de6ae14a56: agent runs do not store the input text
@@ -333,7 +325,6 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ feasibility · real-GP-357b814cff: cited draft or explicit 'not covered'
 - ✅ feasibility · real-GP-357b814cff: reply <= 3 sentences
 - ✅ feasibility · real-GP-357b814cff: Last checked date present
-- ✅ grounding · real-GP-357b814cff: not-covered names what was searched
 - ✅ agents · real-GP-357b814cff: structured Facts/Pattern/Compliance outputs
 - ✅ agents · real-GP-357b814cff: agent-run records for all 5 components
 - ✅ privacy · real-GP-357b814cff: agent runs do not store the input text
@@ -550,7 +541,7 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ refinement · facts-feedback round reran Facts but not Pattern/Compliance
 - ✅ isolation · edit one draft: only that question + one new draft version changed
 - ✅ isolation · edit adding advice refused (422) and nothing changed
-- ✅ isolation · approve one action (A23): only it executed, exactly one doc entry, no email
+- ✅ isolation · approve one action (A27): only it executed, exactly one doc entry, no email
 - ✅ isolation · all other pending actions still pending
 - ✅ gate · re-approving an executed action refused (409)
 - ✅ isolation · reject one draft: only that question changed
@@ -579,4 +570,4 @@ Backend: `https://groww-support-product-pulse-production.up.railway.app`
 - ✅ privacy · no detectable PII pattern in server logs
 - ✅ privacy · no probe PII literal in API responses
 - ✅ privacy · no detectable PII pattern in API responses
-- ❌ grounding · >= 15 claims audited across both loops (80 audited, 76 valid)
+- ✅ grounding · >= 15 claims audited across both loops (83 audited, 83 valid)
