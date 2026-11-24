@@ -92,7 +92,7 @@ def split_sentences(text: str) -> list[str]:
         protected = re.sub(re.escape(a), lambda m, i=i: m.group(0).replace(".", f"§{i}§"), protected, flags=re.I)
     out: list[str] = []
     pos = 0
-    for m in re.finditer(r"[.!?](?:\s*\[\d{1,2}\])*(?=\s+[A-Z₹\"'(]|\s*$)", protected):
+    for m in re.finditer(r"[.!?](?:\s*\[\d{1,2}\])*(?=\s+[A-Z₹\"'(•●▪]|\s*$)", protected):
         seg = protected[pos:m.end()].strip()
         if seg:
             out.append(seg)

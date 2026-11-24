@@ -42,3 +42,11 @@ def test_performance_table_is_detected():
                "An Exit Load of 1% is payable if Units are redeemed within 1 year.",
                "The total expense ratio of the Direct Plan is 0.20% per annum."):
         assert not find_performance(ok), ok
+
+
+def test_bullet_starts_a_new_sentence():
+    # Deployed: two bulleted exit-load facts were merged into one 45-word "sentence" -> TOO_LONG -> blocked.
+    from core.policy import split_sentences
+    s = ("• An Exit Load of 1.00% is payable if Units are redeemed within 1 year from the date of allotment [1]. "
+         "• No Exit Load is payable if Units are redeemed after 1 year from the date of allotment [1].")
+    assert len(split_sentences(s)) == 2
